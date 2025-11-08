@@ -1,5 +1,5 @@
 import pytest
-from utils import validate_amount, parse_amount
+from utils import validate_amount, parse_amount, format_currency, validate_date
 
 
 def test_validate_amount_string_valid():
@@ -38,3 +38,29 @@ def test_parse_amount_string_invalid():
     assert "Invalid amount format: $3.500.75" in str(e.value)
 
 
+def test_format_currency_default():
+    assert format_currency(150.5) == "₹150.50"
+
+
+def test_format_currency_pound_sterling():
+    assert format_currency(150.5, "£") == "£150.50"
+
+
+def test_format_currency_dollar():
+    assert format_currency(150, "$") == "$150.00"
+
+
+def test_validate_date_date_string_empty():
+    assert validate_date("") is False
+
+
+def test_validate_date_date_string_valid():
+    assert validate_date("2025-10-30") is True
+
+
+def test_validate_date_date_string_format_invalid():
+    assert validate_date("30-10-2025") is False
+
+
+def test_validate_date_date_string_date_invalid():
+    assert validate_date("2025-13-30") is False
